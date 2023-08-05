@@ -1,0 +1,285 @@
+<!-- <div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card card-plain">  -->
+                  <button class="nav-link"  class="btn btn-success" (click)="onOpenModal('add')">Ajouter<span class="sr-only">(current)</span></button>
+                  <div class="content table-responsive table-full-width">
+    
+                    <table mat-table  class="table table-hover">
+                     
+                      <thead>
+                        <tr>
+                          <ng-container matColumnDef="documentId">
+                            <th mat-header-cell *matHeaderCellDef> # </th>
+                          </ng-container>
+                          <th scope="col">Titre</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Taille</th>
+                          <th scope="col">Reference</th>
+                          <th scope="col">Serial Number</th>
+                          <th scope="col">Document Validate</th>
+                          <th scope="col">Source</th>
+                          <th scope="col">Support</th>
+                          <th scope="col">Data</th>
+                          <th scope="col">Listes des versions</th>
+                          <th scope="col">Actions</th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let document of documents">
+                            <td mat-cell *matCellDef="let document"> {{ document.documentId }} </td>
+                            <td>{{document.titre}}</td>
+                            <td>{{document.dateCreation}}</td>
+                            <td>{{document.taille}}</td>
+                            <td>{{document.reference}}</td>
+                            <td>{{document.serialNumber}}</td>
+                            <td>{{document.documentValidate}}</td>
+                            <td>{{document.source}}</td>
+                            <td>{{document.support}}</td>
+                            <td>{{document.data}}</td>
+                            <td>{{document.version}}</td> 
+                            <!-- <div class="float-right btn-group btn-group-sm"> -->
+                              <!-- <a (click)="onOpenModal('edit')" class="btn btn-primary tooltips" data-placement="top" data-original-title="edit"><i class="fa fa-pencil"></i> </a> -->
+                              <!-- <a (click)="onOpenModal('delete')"  class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a> -->
+                              <!-- <button (click)="onDeleteDocument(document.documentId)" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></button> -->
+                            <!-- </div>    -->
+                            
+                            <ng-container matColumnDef="actions">
+                              <div class="float-right btn-group btn-group-sm">
+                                    <a (click)="onOpenModal('edit')" class="btn btn-primary tooltips" data-placement="top" data-original-title="edit"><i class="fa fa-pencil"></i> </a>
+                                    <button (click)="onDeleteDocument(document.documentId)" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></button>
+                              </div>
+                            </ng-container>
+                            
+                          </tr>
+                      </tbody>    
+                        <!-- <div class="card-body">
+                          
+                       </div>  -->
+                      
+                       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                       <!-- <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
+                    </table>
+                    <!-- <mat-paginator
+                     [length]="documents.length"
+                    [pageSize]="pageSize"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)="onPageChange($event)"></mat-paginator> -->
+                  </div>
+              <!-- </div>
+           </div>
+       </div>
+   </div>
+</div> -->
+<!-- ADD Modal-->
+
+<div class="modal" id="addDocumentModal"   *ngIf="isModalButtonHidden" tabindex="-1">
+    <div class="modal-dialog" role="document">
+ 
+    <div class="modal-content"> 
+       
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Documents</h5>
+            <button type="button" class="btn-close"  (click)="onCloseModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body"> 
+            <form [formGroup]="addForm" (ngSubmit)="onAddDocument(addForm)">
+
+                  <div class="form-group">
+                    <label for="titre">Titre</label>
+                    <input type="text" formControlName="titre" class="form-control" id="titre" placeholder="Titre" required>
+                  </div>
+                                                      
+                  <div class="form-group">
+                    <label for="dateCreation">Date</label>
+                    <input type="date" formControlName="dateCreation" class="form-control" id="dateCreation" placeholder="Date" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="taille">Taille</label>
+                    <input type="text" formControlName="taille" class="form-control" id="taille" placeholder="Taille" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="reference">Reference</label>
+                    <input type="text"formControlName="reference" class="form-control" id="reference" placeholder="Reference" required>
+                  </div>
+      
+                  <div class="form-group">
+                    <label for="serialNumber">Serial Number</label>
+                    <input type="number" formControlName="serialNumber" class="form-control" id="serialNumber" placeholder="Serial Number" required>
+                  </div>
+      
+                  <fieldset>
+                    <label>Sélectionner la validité du document</label>
+                    <div>
+                      <label>Valide</label>
+                      <input type="radio" formControlName="documentValidate" value="true" autocomplete="off" checked>
+                    </div>
+                    <div>
+                      <label>Non Valide</label>
+                      <input type="radio" formControlName="documentValidate" value="false" autocomplete="off">
+                    </div>
+                  </fieldset>
+                
+                  <div class="form-group">
+                    <label for="source">Source</label>
+                    <input type="text" formControlName="source" class="form-control" id="source" placeholder="Source" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="support">Support</label>
+                    <input type="text" formControlName="support" class="form-control" id="support" placeholder="Support" required>
+                  </div> 
+                  
+                  <div class="input-group">
+                    <label for="file">Upload File</label>
+                    <input type="file" (change)="onFileSelected($event)" formControlName="file">
+                  </div>
+                  
+              </form>     
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  (click)="onCloseModal()">Close</button>
+            <button [disabled]="addForm.invalid"  (click)="onCloseModal()"  (click)="onAddDocument(addForm)" type="submit" class="btn btn-primary" data-dismiss="modal">Ajouter</button>
+          </div> 
+    </div>
+  
+  </div>
+</div>
+
+<!-- EDIT Modal-->
+<div class="modal" id="updateDocumentModal" *ngIf="isModalButtonHidden" tabindex="-1" >
+  
+  <div class="modal-dialog" role="document">
+  
+    <div class="modal-content" > 
+        <div class="modal-header">  
+          <h5 class="modal-title" id="DocumentEditModalLabel">Mettre à jour {{editDocument?.titre}}</h5> 
+          <button type="button" class="close"  (click)="onCloseModal()" data-bs-dismiss="modal" aria-label="Close">  
+          <span aria-hidden="true">&times;</span> 
+          </button>   
+        </div>
+        
+        <div class="modal-body"> 
+          <form [formGroup]="editForm" (ngSubmit)="onEditDocument()">
+            <input type="hidden" formControlName="documentId" class="form-control" id="documentId" >
+                
+              <div class="form-group">
+              
+                <label for="titre">Titre</label>
+              
+                <input type="text" formControlName="titre" class="form-control" id="titre" placeholder="titre">
+              </div>  
+              
+              <div class="form-group">
+              
+              <label for="dateCreation">Date</label>
+              
+              <input type="date" formControlName="dateCreation" class="form-control" id="dateCreation" placeholder="dateCreation">
+              
+              </div>
+              
+              <div class="form-group">
+              
+              <label for="taille">Taille</label>
+              
+              <input type="text" formControlName="taille" class="form-control" id="taille" name="taille" placeholder="taille">
+              
+              </div>
+              
+              <div class="form-group">
+              
+              <label for="reference">Reference</label>
+              
+              <input type="text"formControlName="reference" class="form-control" id="reference" placeholder="reference">
+              
+              </div>
+              
+              <div class="form-group">
+              
+              <label for="serialNumber">Serial Number</label>
+              
+              <input type="number" formControlName="serialNumber" class="form-control" id="serialNumber" placeholder="serialNumber">
+              
+              </div>
+              
+              <div class="form-group">
+              
+              <label for="documentValidate">Validite de Document</label>
+              
+              <input type="text" formControlName="documentValidate" class="form-control" id="documentValidate" placeholder="documentValidate">
+              
+              </div>
+              
+              <div class="form-group">
+              
+              <label for="source">source</label>
+              
+              <input type="text" formControlName="source" class="form-control" id="source" placeholder="source">
+              
+              </div>
+
+              <div class="form-group"> 
+                  <label for="support">support</label> 
+                  <input type="text" formControlName="support" class="form-control" id="support" placeholder="support">    
+              </div>
+            
+
+              <div class="form-group">
+                <label for="data">data</label>
+                <input type="text" formControlName="data" class="form-control" id="data" placeholder="data">          
+              </div>
+
+              <div class="input-group">
+                <label for="file">Upload File</label>
+                <input type="file" (change)="onFileSelected($event)" formControlName="data">
+              </div>
+
+          </form> 
+        </div>  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onCloseModal()">Close</button>
+          <button (click)="onEditDocument()" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+    
+  </div>
+
+</div>
+  
+<!-- Delete Modal --> 
+
+<div class="modal fade" id="deleteDocumentModal" *ngIf="isModalButtonHidden" tabindex="-1" role="dialog" aria-labelledby="deleteDocumentModalLabel" aria-hidden="true">
+  
+  <div class="modal-dialog" role="document">
+  
+      <div class="modal-content" > 
+            <div class="modal-header">
+                  
+                      <h4 class="modal-title">Supprimer Document</h4>
+                      
+                      <button type="button"   aria-label="Close"  (click)="onCloseModal()">
+                      
+                      <span aria-hidden="true">&times;</span>
+                      
+                      </button>
+                  
+              </div>
+                  
+              <div class="modal-body">
+              <h2>Vous etes sur de supprimer cette document{{deleteDocument?.titre}}?</h2>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  (click)="onCloseModal()">Annuler</button>
+                                                                        
+              </div>
+      </div>
+   </div>
+</div>
+            
+
+
